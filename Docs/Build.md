@@ -27,3 +27,4 @@ cmake -G "Visual Studio 16 2019" -A <Win32|x64> -DCMAKE_BUILD_TYPE=<Debug|Releas
 cmake --build . --config <Debug|Release|RelWithDebInfo|MinSizeRel>
 ls ./Binary
 ```
+dumi

@@ -94,7 +94,7 @@ bool IRuntime::InitFixedData()
 
     // ver < 3.1.8
     if (_FileVersion < 3001008) {
-        _Data.Offset.MaxReplyWidth = 0xA4;
+        _Data.Offset.MaxReplyWidth = 0xAC;
     }
     // ver >= 3.1.8
     else if (_FileVersion >= 3001008) {
