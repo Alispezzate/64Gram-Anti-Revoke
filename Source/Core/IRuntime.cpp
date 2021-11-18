@@ -92,12 +92,8 @@ bool IRuntime::InitFixedData()
     _Data.Offset.MainView = 0x98;
     _Data.Offset.SignedTimeText = 0x18;
 
-    // ver < 3.1.8
-    if (_FileVersion < 3001008) {
-        _Data.Offset.MaxReplyWidth = 0xAC;
-    }
-    // ver >= 3.1.8
-    else if (_FileVersion >= 3001008) {
+    // ver >= 1.0.0
+    if (_FileVersion >= 1000000) {
         _Data.Offset.MaxReplyWidth = 0xAC;
     }
 
@@ -629,8 +625,8 @@ bool IRuntime::InitDynamicData_EditedIndex()
 
 #elif defined PLATFORM_X64
 
-    // ver < 3.1.8
-    if (_FileVersion < 3001008) {
+    // ver >= 1.0.0
+    if (_FileVersion >= 1000000) {
         // clang-format off
         /*
             .text:0000000140B7BE70                         ; void __fastcall HistoryMessage::applyEdition(HistoryMessage *this, HistoryMessageEdition *edition)
@@ -719,97 +715,6 @@ bool IRuntime::InitDynamicData_EditedIndex()
         _Data.Function.EditedIndex =
             (FnIndexT)(EditedIndexCaller + 5 + *(int32_t *)(EditedIndexCaller + 1));
     }
-    // ver >= 3.1.8
-    else if (_FileVersion >= 3001008) {
-        // clang-format off
-        /*
-            .text:0000000140B7BE70                         ; void __fastcall HistoryMessage::applyEdition(HistoryMessage *this, HistoryMessageEdition *edition)
-            .text:0000000140B7BE70                         ?applyEdition@HistoryMessage@@UEAAX$$QEAUHistoryMessageEdition@@@Z proc near
-            .text:0000000140B7BE70
-            .text:0000000140B7BE70                         result          = QString ptr -0C0h
-            .text:0000000140B7BE70                         var_B8          = QList<EntityInText> ptr -0B8h
-            .text:0000000140B7BE70                         data            = qword ptr -0B0h
-            .text:0000000140B7BE70                         var_A8          = QList<EntityInText> ptr -0A8h
-            .text:0000000140B7BE70                         markup          = HistoryMessageMarkupData ptr -0A0h
-            .text:0000000140B7BE70                         var_78          = HistoryMessageRepliesData ptr -78h
-            .text:0000000140B7BE70                         arg_0           = qword ptr  10h
-            .text:0000000140B7BE70                         arg_8           = dword ptr  18h
-            .text:0000000140B7BE70
-            .text:0000000140B7BE70                         ; __unwind { // __CxxFrameHandler4
-            .text:0000000140B7BE70 48 89 5C 24 08                          mov     [rsp-8+arg_0], rbx
-            .text:0000000140B7BE75 55                                      push    rbp
-            .text:0000000140B7BE76 56                                      push    rsi
-            .text:0000000140B7BE77 57                                      push    rdi
-            .text:0000000140B7BE78 41 54                                   push    r12
-            .text:0000000140B7BE7A 41 55                                   push    r13
-            .text:0000000140B7BE7C 41 56                                   push    r14
-            .text:0000000140B7BE7E 41 57                                   push    r15
-            .text:0000000140B7BE80 48 8D 6C 24 D9                          lea     rbp, [rsp-27h]
-            .text:0000000140B7BE85 48 81 EC B0 00 00 00                    sub     rsp, 0B0h
-            .text:0000000140B7BE8C 48 8B FA                                mov     rdi, rdx
-            .text:0000000140B7BE8F 48 8B F1                                mov     rsi, rcx
-            .text:0000000140B7BE92 45 33 E4                                xor     r12d, r12d
-            .text:0000000140B7BE95 44 89 65 6F                             mov     [rbp+57h+arg_8], r12d
-            .text:0000000140B7BE99 44 38 22                                cmp     [rdx], r12b
-            .text:0000000140B7BE9C 74 06                                   jz      short loc_140B7BEA4
-            .text:0000000140B7BE9E 83 49 28 01                             or      dword ptr [rcx+28h], 1
-            .text:0000000140B7BEA2 EB 04                                   jmp     short loc_140B7BEA8
-            .text:0000000140B7BEA4                         ; ---------------------------------------------------------------------------
-            .text:0000000140B7BEA4
-            .text:0000000140B7BEA4                         loc_140B7BEA4:                          ; CODE XREF: HistoryMessage::applyEdition(HistoryMessageEdition &&)+2C↑j
-            .text:0000000140B7BEA4 83 61 28 FE                             and     dword ptr [rcx+28h], 0FFFFFFFEh
-            .text:0000000140B7BEA8
-            .text:0000000140B7BEA8                         loc_140B7BEA8:                          ; CODE XREF: HistoryMessage::applyEdition(HistoryMessageEdition &&)+32↑j
-            .text:0000000140B7BEA8 41 BE 01 00 00 00                       mov     r14d, 1
-            .text:0000000140B7BEAE 83 7A 04 FF                             cmp     dword ptr [rdx+4], 0FFFFFFFFh
-            .text:0000000140B7BEB2 74 65                                   jz      short loc_140B7BF19
-            .text:0000000140B7BEB4 48 8B 41 08                             mov     rax, [rcx+8]
-            .text:0000000140B7BEB8 48 8B 18                                mov     rbx, [rax]
-
-            // find this
-            .text:0000000140B7BEBB E8 B0 F0 FF FF                          call    ?Index@?$RuntimeComponent@UHistoryMessageEdited@@VHistoryItem@@@@SAHXZ ; RuntimeComponent<HistoryMessageEdited,HistoryItem>::Index(void)
-
-            .text:0000000140B7BEC0 48 63 C8                                movsxd  rcx, eax
-            .text:0000000140B7BEC3 48 83 7C CB 10 08                       cmp     qword ptr [rbx+rcx*8+10h], 8
-            .text:0000000140B7BEC9 73 24                                   jnb     short loc_140B7BEEF
-            .text:0000000140B7BECB E8 A0 F0 FF FF                          call    ?Index@?$RuntimeComponent@UHistoryMessageEdited@@VHistoryItem@@@@SAHXZ ; RuntimeComponent<HistoryMessageEdited,HistoryItem>::Index(void)
-            .text:0000000140B7BED0 8B C8                                   mov     ecx, eax
-            .text:0000000140B7BED2 41 8B D6                                mov     edx, r14d
-            .text:0000000140B7BED5 48 D3 E2                                shl     rdx, cl
-            .text:0000000140B7BED8 48 8B 46 08                             mov     rax, [rsi+8]
-            .text:0000000140B7BEDC 48 8B 08                                mov     rcx, [rax]
-            .text:0000000140B7BEDF 48 0B 91 18 02 00 00                    or      rdx, [rcx+218h] ; mask
-            .text:0000000140B7BEE6 48 8D 4E 08                             lea     rcx, [rsi+8]    ; this
-            .text:0000000140B7BEEA E8 81 87 E9 FF                          call    ?UpdateComponents@RuntimeComposerBase@@IEAA_N_K@Z ; RuntimeComposerBase::UpdateComponents(unsigned __int64)
-            .text:0000000140B7BEEF
-            .text:0000000140B7BEEF                         loc_140B7BEEF:                          ; CODE XREF: HistoryMessage::applyEdition(HistoryMessageEdition &&)+59↑j
-            .text:0000000140B7BEEF 48 8B 46 08                             mov     rax, [rsi+8]
-            .text:0000000140B7BEF3 48 8B 18                                mov     rbx, [rax]
-            .text:0000000140B7BEF6 E8 75 F0 FF FF                          call    ?Index@?$RuntimeComponent@UHistoryMessageEdited@@VHistoryItem@@@@SAHXZ ; RuntimeComponent<HistoryMessageEdited,HistoryItem>::Index(void)
-            .text:0000000140B7BEFB 48 63 C8                                movsxd  rcx, eax
-            .text:0000000140B7BEFE 48 63 44 CB 10                          movsxd  rax, dword ptr [rbx+rcx*8+10h]
-            .text:0000000140B7BF03 83 F8 08                                cmp     eax, 8
-            .text:0000000140B7BF06 72 09                                   jb      short loc_140B7BF11
-            .text:0000000140B7BF08 48 8B C8                                mov     rcx, rax
-            .text:0000000140B7BF0B 48 03 4E 08                             add     rcx, [rsi+8]
-            .text:0000000140B7BF0F EB 03                                   jmp     short loc_140B7BF14
-
-            83 7A 04 FF 74 ?? 48 8B 41 08 48 8B 18 E8
-        */
-        // clang-format on
-
-        auto vResult =
-            _MainModule.search("83 7A 04 FF 74 ?? 48 8B 41 08 48 8B 18 E8"_sig).matches();
-        if (vResult.size() != 1) {
-            LOG(Warn, "[IRuntime] Search EditedIndex failed. (new)");
-            return false;
-        }
-
-        auto EditedIndexCaller = vResult.at(0) + 13;
-        _Data.Function.EditedIndex =
-            (FnIndexT)(EditedIndexCaller + 5 + *(int32_t *)(EditedIndexCaller + 1));
-    }
-
     return true;
 
 #else

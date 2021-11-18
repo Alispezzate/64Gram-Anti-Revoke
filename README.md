@@ -7,7 +7,7 @@
 
 :earth_americas: English | :earth_asia: [简体中文](/README-CN.md)
 
-Telegram local messages anti-revoke plugin.
+Telegram(64Gram) local messages anti-revoke plugin.
 
 ## :mag: Preview
 ![](/Resource/Preview.gif)
